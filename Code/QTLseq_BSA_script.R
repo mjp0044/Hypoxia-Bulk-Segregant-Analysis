@@ -4,7 +4,7 @@
 #Combines count files 
 #Last edited 3-16-2026
 #Built originally on R version 4.4.2 
-#Last tested on 4.5.1
+#Last tested on 4.6.0
 
 # if (!require("BiocManager", quietly = TRUE))
 #   install.packages("BiocManager")
@@ -468,6 +468,9 @@ theme_set(theme_cowplot())
         !(Effect == "upstream_gene_variant" & as.numeric(Distance) > 1000) &
         !(Effect == "intergenic_region")
     )
+  
+  # Export as supplementary table 
+    write.csv(SNPeff_stats_filtered, file = "Significant SNPs post filtering.csv", row.names = FALSE, col.names = TRUE)
   
   # Build gene-level summary
   # Create list of effects labels corresponding to exonic snps
