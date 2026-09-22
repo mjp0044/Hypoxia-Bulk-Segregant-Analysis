@@ -1,9 +1,3 @@
-> **Note to self before pasting into GitHub:** every image below points to a flat `Figure/` folder living next to
-> `README.md` in the repo. Upload the images there under the exact filenames referenced, including the new
-> composite `cyp6a14 figure.png`. Also double-check the "Study design" paragraph below — I inferred the
-> Pcrit/bulk-segregant framing from file and variable names; adjust the wording to match your actual methods
-> description.
-
 # Bulk-Segregant QTL Mapping of Hypoxia Tolerance in *Tigriopus californicus*
 
 Bulk segregant analysis (BSA) / QTL-seq mapping of loci underlying hypoxia tolerance in the intertidal copepod
