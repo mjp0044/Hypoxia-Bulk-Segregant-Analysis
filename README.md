@@ -1,13 +1,13 @@
 # Bulk-Segregant QTL Mapping of Hypoxia Tolerance in *Tigriopus californicus*
 
 Bulk segregant analysis (BSA) / QTL-seq mapping of loci underlying hypoxia tolerance in the intertidal copepod
-*Tigriopus californicus*, using pooled whole-genome sequencing of phenotypically extreme bulks from F30 hybrids
+*Tigriopus californicus*, using pooled whole-genome sequencing of phenotypically extreme bulks from F22+ hybrids
 between two source populations (SD and SH). Full analysis code: [`QTLseq_BSA_script.R`](QTLseq_BSA_script.R).
 
 ## Study design
 
-Two DNA pools ("Top" and "Bottom" bulks, sampled from opposite tails of the hypoxia-tolerance phenotype
-distribution) were sequenced and their allele counts merged into a single table of biallelic SNPs. Genome-wide
+Two DNA pools ("High Pcrit" and "Low Pcrit" bulks, sampled from opposite tails of the hypoxia-tolerance phenotype
+distribution where Low Pcrit means "more tolerant") were sequenced and their allele counts merged into a single table of biallelic SNPs. Genome-wide
 divergence between bulks was quantified across 12 chromosomes using [QTLseqr](https://github.com/bmansfeld/QTLseqr)'s
 G′ statistic (750 kb sliding windows), and significant regions were annotated with [SnpEff](https://pcingola.github.io/SnpEff/)
 and cross-referenced against gene models, a prior RNA-seq differential-expression time series, and curated
@@ -44,7 +44,7 @@ SNP density across the genome (useful for spotting poorly-sequenced regions):
 
 Each QTL was annotated down to the SNP level with SnpEff, letting individual candidates be inspected in genomic
 context. Below, *cyp6a14* (TCAL_08505) on Chr_11 is shown from three angles — a zoomed view of the gene itself,
-its immediate surrounding neighborhood, and a genome-browser panel for wider context — with ΔSNP-index plotted
+its immediate surrounding neighborhood, and a view from IGV showing SNPs causing a stop lost mutation at the end of the gene — with ΔSNP-index plotted
 alongside the gene model throughout:
 
 ![cyp6a14 candidate gene detail](Figures/cyp6a14%20figure.png)
@@ -144,8 +144,7 @@ AIC: 628.88
 ## Which population's allele rose in frequency?
 
 Within each QTL, SD allele frequency was tracked separately in the low- and high-Pcrit bulks, letting each QTL be
-classified as SD- or SH-biased depending on which source population's allele increased in the low-Pcrit bulk. This
-is the figure used in the paper: the SD allele is clearly preferred in the low-Pcrit bulk across most of the
+classified as SD- or SH-biased depending on which source population's allele was higher in the low-Pcrit bulk. The SD allele is clearly preferred in the low-Pcrit bulk across most of the
 significant QTL regions.
 
 ![SD allele frequency by bulk, faceted by QTL-containing chromosome](Figures/AF_of_SD_by_bulk_plot.jpg)
