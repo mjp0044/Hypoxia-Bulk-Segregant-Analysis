@@ -52,7 +52,16 @@ alongside the gene model throughout:
 (Other candidate genes — *Tret1*, *Lcc2*, *GFPT1*, *Gnpda1*, *ATPsynCf6*, *Cha*, *Oxa1l*, *mesh* — were profiled
 the same way.)
 
-## Modeling gene-level SNP architecture
+## Do QTL genes line up with an independent RNA-seq study?
+
+Candidate genes were cross-referenced against a prior RNA-seq differential-expression (DE) time series. **101 of
+721 candidate genes (14%)** were also DE in that study — a modest, non-significant enrichment over the
+genome-wide background rate (Fisher's exact test, OR = 1.18, p = 0.13). Genes that *did* overlap, however, carry
+significantly more SNPs per gene and significantly more intronic SNPs specifically, both after adjusting for gene
+length (models above), along with a higher burden of "modifier"-impact SNPs.
+
+
+## Modeling gene-level SNP architecture in QTL genes that overlap with expression data
 
 Beyond calling QTLs, the 721 candidate genes were characterized with a series of generalized linear models, each
 matched to the response variable's distribution:
@@ -173,14 +182,6 @@ ggsave("AF_of_SD_by_bulk_plot.jpg", plot = AF_by_QTL_and_bulk_plot_SD_only, widt
 
 Of the 721 candidate genes, **498 (69%) fall in SD-biased QTLs** and **223 (31%) fall in SH-biased QTLs**
 (Chr_3/11/12 vs. Chr_8/9) — a split that turned out to be predictive of QTL signal strength (model above).
-
-## Do QTL genes line up with an independent RNA-seq study?
-
-Candidate genes were cross-referenced against a prior RNA-seq differential-expression (DE) time series. **101 of
-721 candidate genes (14%)** were also DE in that study — a modest, non-significant enrichment over the
-genome-wide background rate (Fisher's exact test, OR = 1.18, p = 0.13). Genes that *did* overlap, however, carry
-significantly more SNPs per gene and significantly more intronic SNPs specifically, both after adjusting for gene
-length (models above), along with a higher burden of "modifier"-impact SNPs.
 
 ## What are the QTL genes doing functionally?
 
