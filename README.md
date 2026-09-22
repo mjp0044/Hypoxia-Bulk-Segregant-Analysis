@@ -1,8 +1,8 @@
-> **Note to self before pasting into GitHub:** the image paths below mirror this project's existing folder
-> structure (e.g. `QTL figures and results/Gprime.jpg`). Upload those folders alongside `README.md` in the repo,
-> or edit the paths to match wherever you land the figures. Also double-check the "Study design" paragraph below —
-> I inferred the Pcrit/bulk-segregant framing from file and variable names; adjust the wording to match your
-> actual methods description.
+> **Note to self before pasting into GitHub:** every image below points to a flat `Figure/` folder living next to
+> `README.md` in the repo. Upload the images there under the exact filenames referenced, including the new
+> composite `cyp6a14 figure.png`. Also double-check the "Study design" paragraph below — I inferred the
+> Pcrit/bulk-segregant framing from file and variable names; adjust the wording to match your actual methods
+> description.
 
 # Bulk-Segregant QTL Mapping of Hypoxia Tolerance in *Tigriopus californicus*
 
@@ -23,7 +23,7 @@ functional gene sets.
 
 G′ was calculated genome-wide and significant QTLs called at α = 0.01:
 
-![G-prime genome-wide scan](QTL%20figures%20and%20results/Gprime.jpg)
+![G-prime genome-wide scan](Figures/Gprime.jpg)
 
 | Chromosome | QTL | Region (Mb) | Length (Mb) | # SNPs | Max G′ | Mean q-value |
 |---|---|---|---|---|---|---|
@@ -38,24 +38,25 @@ G′ was calculated genome-wide and significant QTLs called at α = 0.01:
 **7 significant QTLs** spanning **5 of 12 chromosomes**, mapping to **721 candidate genes**.
 
 <details>
-<summary>Supplementary QC/diagnostic plots</summary>
+<summary>Supplementary QC/diagnostic plot</summary>
 
-| SNP density across the genome | Chromosomes carrying significant peaks | ΔSNP-index with confidence intervals |
-|---|---|---|
-| ![nSNPs](QTL%20figures%20and%20results/nSNPs.jpg) | ![Gprime peaks](QTL%20figures%20and%20results/Gprime_chroms_with_peaks.jpg) | ![deltaSNP](QTL%20figures%20and%20results/deltaSNP.jpg) |
+SNP density across the genome (useful for spotting poorly-sequenced regions):
+
+![nSNPs](Figures/nSNPs.jpg)
 
 </details>
 
 ## Zooming in on a candidate gene
 
 Each QTL was annotated down to the SNP level with SnpEff, letting individual candidates be inspected in genomic
-context — here, a missense-carrying gene (*cyp6a14* / TCAL_08505) on Chr_11, with ΔSNP-index plotted against the
-local gene model:
+context. Below, *cyp6a14* (TCAL_08505) on Chr_11 is shown from three angles — a zoomed view of the gene itself,
+its immediate surrounding neighborhood, and a genome-browser panel for wider context — with ΔSNP-index plotted
+alongside the gene model throughout:
 
-![cyp6a14 gene track](Gene%20Tracks/cyp6a14%20only%20gene%20track%20with%20delta%20snp.jpg)
+![cyp6a14 candidate gene detail](Figures/cyp6a14%20figure.png)
 
-(Several other candidates — *Tret1*, *Lcc2*, *GFPT1*, *Gnpda1*, *ATPsynCf6*, *Cha*, *Oxa1l*, *mesh* — were
-profiled the same way; see the [`Gene Tracks/`](Gene%20Tracks) folder.)
+(Other candidate genes — *Tret1*, *Lcc2*, *GFPT1*, *Gnpda1*, *ATPsynCf6*, *Cha*, *Oxa1l*, *mesh* — were profiled
+the same way.)
 
 ## Modeling gene-level SNP architecture
 
@@ -75,7 +76,7 @@ differential-expression (DE) time series, and which source population's allele r
 
 | DE-overlap comparison | Population-bias comparison |
 |---|---|
-| ![Ridgeline, DE overlap](Time%20Series%20overlap%20comparisons/ridgeline_column_plot.png) | ![Ridgeline, population bias](Pop%20bias%20comparisons/ridgeline_column_plot_pb.png) |
+| ![Ridgeline, DE overlap](Figures/ridgeline_column_plot.png) | ![Ridgeline, population bias](Figures/ridgeline_column_plot_pb.png) |
 
 Three representative model fits, in full:
 
@@ -102,23 +103,23 @@ Residual deviance: 7763.5  on 719  degrees of freedom
 </details>
 
 <details>
-<summary><b>Intronic SNP burden vs. population bias</b> — quasi-Poisson, gene-length offset</summary>
+<summary><b>Intronic SNP burden vs. RNA-seq DE overlap</b> — quasi-Poisson, gene-length offset</summary>
 
-SH-biased QTL genes carry ~16% fewer intronic SNPs (length-adjusted) than SD-biased genes.
+DE-overlapping genes carry ~32% more intronic SNPs (length-adjusted) than non-overlapping genes.
 
 ```r
-summary(inintron.mod.pb)
-# n_introns ~ bias + offset(log(gene_length_kb)), family = quasipoisson
+summary(inintron.mod)
+# n_introns ~ In_time_series + offset(log(gene_length_kb)), family = quasipoisson
 
 Coefficients:
-            Estimate Std. Error t value Pr(>|t|)    
-(Intercept)  1.33184    0.03087  43.148  < 2e-16 ***
-biasSH_bias -0.16900    0.06110  -2.766  0.00582 ** 
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)         1.23565    0.02976   41.52  < 2e-16 ***
+In_time_seriesTRUE  0.27580    0.06599    4.18 3.28e-05 ***
 ---
-(Dispersion parameter for quasipoisson family taken to be 11.2823)
+(Dispersion parameter for quasipoisson family taken to be 11.21765)
 
     Null deviance: 8903.0  on 720  degrees of freedom
-Residual deviance: 8814.3  on 719  degrees of freedom
+Residual deviance: 8717.6  on 719  degrees of freedom
 ```
 
 </details>
@@ -148,29 +149,52 @@ AIC: 628.88
 
 ## Which population's allele rose in frequency?
 
-Within each QTL, allele frequency trajectories were tracked separately for the SD- and SH-source alleles across
-bulks, letting each QTL be classified as SD- or SH-biased:
+Within each QTL, SD allele frequency was tracked separately in the low- and high-Pcrit bulks, letting each QTL be
+classified as SD- or SH-biased depending on which source population's allele increased in the low-Pcrit bulk. This
+is the figure used in the paper: the SD allele is clearly preferred in the low-Pcrit bulk across most of the
+significant QTL regions.
 
-![Allele frequency by QTL and bulk](Allele%20Frequency%20Plots/AF_by_QTL_and_bulk_plot.jpg)
+![SD allele frequency by bulk, faceted by QTL-containing chromosome](Figures/AF_of_SD_by_bulk_plot.jpg)
+
+<details>
+<summary>Plotting code</summary>
+
+```r
+AF_by_QTL_and_bulk_plot_SD_only <- qtl_snps_subset_long %>%
+  filter(population == "SD") %>%
+  dplyr::mutate(POS_Mb = POS / 1e6) %>%
+  ggplot(aes(x = POS_Mb, y = frequency, color = treatment)) +
+  geom_point(alpha = 0.2, size = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, aes(group = interaction(treatment, qtl)), color = "black", linewidth = 1.5) +
+  geom_smooth(method = "loess", se = TRUE, aes(group = interaction(treatment, qtl)), linewidth = 1) +
+  scale_color_manual(values = c("gold", "forestgreen")) +
+  facet_grid(~CHROM, scales = "free_x", space = "free_x") +
+  labs(x = "Position (Mb)", y = "Allele Frequency", color = "Bulk") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), strip.text = element_text(face = "bold")) +
+  ggtitle(label = "SD allele frequencies by bulk in chromosomes subsetted by QTL")
+
+ggsave("AF_of_SD_by_bulk_plot.jpg", plot = AF_by_QTL_and_bulk_plot_SD_only, width = 13, height = 4, dpi = 300)
+```
+
+</details>
 
 Of the 721 candidate genes, **498 (69%) fall in SD-biased QTLs** and **223 (31%) fall in SH-biased QTLs**
-(Chr_3/11/12 vs. Chr_8/9) — a split that turned out to be predictive of both QTL signal strength and intronic SNP
-burden (models above).
+(Chr_3/11/12 vs. Chr_8/9) — a split that turned out to be predictive of QTL signal strength (model above).
 
 ## Do QTL genes line up with an independent RNA-seq study?
 
 Candidate genes were cross-referenced against a prior RNA-seq differential-expression (DE) time series. **101 of
 721 candidate genes (14%)** were also DE in that study — a modest, non-significant enrichment over the
 genome-wide background rate (Fisher's exact test, OR = 1.18, p = 0.13). Genes that *did* overlap, however, carry
-significantly more SNPs per gene after adjusting for gene length (model above), along with a higher burden of
-intronic and "modifier"-impact SNPs specifically.
+significantly more SNPs per gene and significantly more intronic SNPs specifically, both after adjusting for gene
+length (models above), along with a higher burden of "modifier"-impact SNPs.
 
 ## What are the QTL genes doing functionally?
 
 GO enrichment (`topGO`, Fisher's exact test, BP ontology) was run on the 721 candidate genes and visualized with
 `rrvgo` after semantic-similarity clustering:
 
-![GO term treemap](TopGO%20and%20rrvgo%20results/rrvgo%20treemap%20all.jpg)
+![GO term treemap](Figures/rrvgo%20treemap%20all.jpg)
 
 Targeted overlap tests against curated functional gene sets (candidate vs. genome-wide background, Fisher's exact
 test) did not show significant enrichment for any single category tested, though point estimates trended in
