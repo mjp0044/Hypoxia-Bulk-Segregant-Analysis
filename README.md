@@ -70,7 +70,7 @@ differential-expression (DE) time series, and which source population's allele r
 
 | DE-overlap comparison | Population-bias comparison |
 |---|---|
-| ![Ridgeline, DE overlap](Figures/ridgeline_column_plot.png) | ![Ridgeline, population bias](Figures/Gprime_by_popbias.jpg) |
+| ![Ridgeline, DE overlap](Figures/ridgeline_column_plot.jpg) | ![Ridgeline, population bias](Figures/Gprime_by_popbias.jpg) |
 
 Three representative model fits, in full:
 
