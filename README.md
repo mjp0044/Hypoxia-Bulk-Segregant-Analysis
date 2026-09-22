@@ -190,15 +190,49 @@ GO enrichment (`topGO`, Fisher's exact test, BP ontology) was run on the 721 can
 
 ![GO term treemap](Figures/rrvgo%20treemap%20all.jpg)
 
-Targeted overlap tests against curated functional gene sets (candidate vs. genome-wide background, Fisher's exact
-test) did not show significant enrichment for any single category tested, though point estimates trended in
-different directions:
+<details>
+<summary>GO enrichment + semantic-similarity reduction code</summary>
 
-| Gene set | Odds ratio | p-value |
-|---|---|---|
-| Mitochondrial-targeted proteins | 0.83 | 0.43 |
-| Cuticle / chitin processing | 1.07 | 0.75 |
-| Glycolysis & related processes | 0.53 | 0.23 |
+```r
+# Gene-to-GO mappings and gene universe
+geneID2GO <- readMappings(file = "Genes2GOterms_SDv2.2_noPA.txt")
+geneUniverse <- names(geneID2GO)
+
+# Flag candidate genes (1) against the full gene universe (0)
+GeneInt.all <- as.character(gene_summary$Gene_ID)
+geneList.all <- factor(as.integer(geneUniverse %in% GeneInt.all))
+names(geneList.all) <- geneUniverse
+
+# Build topGOdata object and run the enrichment test
+all_GO <- new("topGOdata", description = "GO analysis of all sig genes", ontology = "BP", nodeSize = 10,
+              allGenes = geneList.all, annot = annFUN.gene2GO, gene2GO = geneID2GO)
+
+resultFisher.all <- runTest(all_GO, algorithm = "weight01", statistic = "fisher")
+
+# Top 150 significant GO terms
+allRes.all <- GenTable(all_GO, fisher = resultFisher.all, ranksOf = "fisher", topNodes = 150, numChar = 500)
+colnames(allRes.all)[6] <- "p-value"
+allRes.all$`p-value` <- as.numeric(allRes.all$`p-value`)
+allRes.all <- allRes.all[allRes.all$`p-value` < 0.05, ]
+
+# rrvgo: cluster GO terms by semantic similarity, then plot
+simMatrix.all <- calculateSimMatrix(allRes.all$GO.ID,
+                                     orgdb = Tcalif_orgdb_object,
+                                     ont = "BP",
+                                     method = "Wang",
+                                     keytype = "GID")
+
+reducedTerms.all <- reduceSimMatrix(simMatrix.all,
+                                     threshold = 0.8,
+                                     orgdb = Tcalif_orgdb_object,
+                                     keytype = "GID")
+
+jpeg(filename = "rrvgo treemap all.jpg", width = 10, height = 6, units = "in", res = 300)
+treemapPlot(reducedTerms.all)
+dev.off()
+```
+
+</details>
 
 ## Methods at a glance
 
